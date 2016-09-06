@@ -23,3 +23,6 @@ Server:
     port: server port
     
 Tips: This executable file should not be in the same dir with files to be dragged, otherwise it would be uploaded and removed with other files.
+
+# Dependences:
+Boost_1.59.0, gflags.2.1.2.1, glog.0.3.3.0, libevent_vc120.2.1.4.0, openssl_vc120.1.0.1.800, thrift-0.9.3.
