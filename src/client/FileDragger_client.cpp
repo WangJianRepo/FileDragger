@@ -223,8 +223,14 @@ void CreateFolders(std::vector<FileInfo>& file_info) {
 
 void SaveFiles(map<string, string>& path_file_map) {
   for (auto item : path_file_map) {
-    ofstream ofstrm(item.first, ios::binary | ios::trunc);
-    ofstrm << item.second;
-    ofstrm.close();
+    if (item.second == "") {
+      LOG(WARNING) << "WARNING: file\t" << item.first << "\t has no data, drop it.";
+    }
+    else {
+      ofstream ofstrm(item.first, ios::binary | ios::trunc);
+      ofstrm << item.second;
+      ofstrm.close();
+    }
+
   }
 }
