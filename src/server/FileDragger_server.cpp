@@ -87,24 +87,23 @@ class FileDraggerHandler : virtual public FileDraggerIf {
       LOG(INFO) << "File:\t" << rpath;
       boost::filesystem::path p(rpath);
       std::fstream fstrm;
-      while (true) {
-        try {
-          fstrm.open(rpath, std::ios::in | std::ios::out | std::ios::binary);
-          if (fstrm.good()) break;
-          //std::cout << "File has been opened, waiting... : " << rpath << std::endl;
-          LOG(INFO) << "File has been opened, waiting to be closed... : " << rpath;
-          boost::this_thread::sleep(boost::posix_time::milliseconds(2 * 1000)); // sleep 2 sec
-
-        }
-        catch (std::exception& e) {
-          LOG(ERROR) << e.what() << std::endl;
-        }
-        fstrm.close();
-      }
       std::ostringstream osstrm;
-      osstrm << fstrm.rdbuf();
-
-
+      int num_try = 20;
+      while (num_try-- != 0) {  // try to open 20 times
+          fstrm.open(rpath, std::ios::in | std::ios::out | std::ios::binary);
+          if (fstrm.is_open()) break;
+          //std::cout << "File has been opened, waiting... : " << rpath << std::endl;
+          LOG(WARNING) << "Fail to open file, try again... " << num_try << "/20: " << rpath;
+          boost::this_thread::sleep(boost::posix_time::milliseconds(1 * 1000)); // sleep 1 sec
+      }
+      if (num_try != 0) {
+        osstrm << fstrm.rdbuf();
+      }
+      else
+      {
+        LOG(ERROR) << "Failed.";
+        osstrm << "";
+      }
       _return.files.insert(std::pair<std::string, std::string>(rpath, osstrm.str()));
       fstrm.close();
     }
