@@ -3,6 +3,9 @@ Monitoring files and dirs in a dir from server and dragging them to client.
 
 Download files and dirs in a designated dir in server automatically and periodically. After downloading files, all downloaded files will be deleted, and empty dirs will be also deleted after those files are deleted.
 
+# Install
+    g++ -std=c++11 ../server/*.cpp -o FileDraggerServer -lgflags -lglog -levent  -lthrift -lboost_system -lboost_filesystem -lboost_thread
+
 # Usage
 Run command in a dir, and all files and dirs will be downloaded to this dir.
 
