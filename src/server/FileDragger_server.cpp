@@ -58,11 +58,14 @@ class FileDraggerHandler : virtual public FileDraggerIf {
     boost::filesystem::path p("./");
     typedef boost::filesystem::recursive_directory_iterator rd_iterator;
     rd_iterator end;
+    int max_num_once = 10000;
     for (rd_iterator pos(p); pos != end; ++pos) {
+      if (max_num_once <= 0) break;
       FileInfo file_dir_info;
       file_dir_info.rpath = pos->path().string();
       file_dir_info.isDir = boost::filesystem::is_directory(pos->path());
       _return.file_dir_info.push_back(file_dir_info);
+      max_num_once--;
     }
 
     if (_return.file_dir_info.size() > 0) {
